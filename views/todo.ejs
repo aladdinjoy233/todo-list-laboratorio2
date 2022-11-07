@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<%- include('partials/head') %>
+
+<body id="todo-pg">
+
+	<canvas id="gradient-canvas" data-transition-in></canvas>
+
+	<div class="container">
+		<h1>My to do list</h1>
+		<ul class="task-list">
+
+			<% if (listas.length > 0) { %>
+				<% for (lista of listas) { %>
+
+					<li class="listas-tareas">
+						<div class="lista <%= lista.estado == "resuelto" ? 'completo' : '' %>">
+							<div class="lista-header">
+								<div class="lista-data">
+									<div class="lista-title"><%= lista.titulo %></div>
+									<div class="lista-fecha">Creado: <%= lista.creacion %></div>
+								</div>
+								<a class="lista-settings"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+							</div>
+
+							<% if (lista.tareas.length > 0) { %>
+								<ul class="sub-tareas">
+									<% for (tarea of lista.tareas) { %>
+										<li class="tarea">
+											<div id="tarea-<%= tarea.id %>" class="item <%= tarea.estado == "resuelto" ? 'completo' : '' %>" onclick="cambiarEstado(<%= tarea.id %>)">
+												<div class="item-header">
+													<div class="item-title"><%= tarea.titulo %></div>
+													<div class="item-fechas">
+														<div class="item-fecha">Creado: <%= tarea.creacion %></div>
+														<% if (tarea.fechaLimite) { %>
+															<div class="item-fecha">Limite: <%= tarea.fechaLimite %></div>
+														<% } %>
+														<% if (tarea.resolucion) { %>
+															<div class="item-fecha fecha-resolucion">Resuelto: <%= tarea.resolucion %></div>
+														<% } %>
+													</div>
+												</div>
+												<% if (tarea.descripcion) { %>
+													<div class="item-description"><%= tarea.descripcion %></div>
+												<% } %>
+											</div>
+											<a onclick="borrar('<%= tarea.id %>')"><i class="fa-solid fa-trash"></i></a>
+										</li>
+									<% } %>
+								</ul>
+							<% } %>
+
+						</div>
+					</li>
+
+				<% } %>
+			<% } %> 
+
+			<% if (tareas.length > 0) { %>
+				<% for (tarea of tareas) { %>
+
+					<li class="tarea">
+						<div id="tarea-<%= tarea.id %>" class="item <%= tarea.estado == "resuelto" ? 'completo' : '' %>" onclick="cambiarEstado(<%= tarea.id %>)">
+							<div class="item-header">
+								<div class="item-title"><%= tarea.titulo %></div>
+								<div class="item-fechas">
+									<div class="item-fecha">Creado: <%= tarea.creacion %></div>
+									<% if (tarea.fechaLimite) { %>
+										<div class="item-fecha">Limite: <%= tarea.fechaLimite %></div>
+									<% } %>
+									<% if (tarea.resolucion) { %>
+										<div class="item-fecha">Resuelto: <%= tarea.resolucion %></div>
+									<% } %>
+								</div>
+							</div>
+							<% if (tarea.descripcion) { %>
+								<div class="item-description"><%= tarea.descripcion %></div>
+							<% } %>
+						</div>
+						<a onclick="borrar('<%= tarea.id %>')"><i class="fa-solid fa-trash"></i></a>
+					</li>
+					
+				<% } %>
+			<% } %>
+		</ul>
+		<!-- <form onsubmit="return agregar()" class="input-group">
+			<label for="new-task">Add new task</label>
+			<div class="combine-inputs">
+				<input type="text" id="new-task" name="new-task">
+				<input type="submit" value="Submit">
+			</div>
+		</form> -->
+		<div class="creation-menu">
+			<ul class="options">
+				<li class="new-task"><button><i class="fa-solid fa-file"></i></button></li>
+				<li class="new-group"><button><i class="fa-solid fa-folder"></i></button></li>
+			</ul>
+
+			<div class="new-btn">
+				<i class="fa-solid fa-plus"></i>
+			</div>
+		</div>
+	</div>
+
+	<script src="/javascripts/script.js"></script>
+	<script src="/javascripts/gradient.js"></script>
+
+</body>
+</html>
