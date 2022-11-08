@@ -63,10 +63,43 @@ function agregarGrupo() {
 	})
 		.then(res => res.json())
 		.then(data => {
-
 			window.location = data.redirect;
+		});
 
-			nameInput.value = '';
+	return false;
+}
+
+function agregarTarea() {
+	let nameInput = document.querySelector('#nombre_tarea');
+	let descInput = document.querySelector('#desc_tarea');
+	let prioridadInput = document.querySelector('#prioridad_tarea');
+	let listaInput = document.querySelector('#lista_tarea');
+	let limiteInput = document.querySelector('#limite_tarea');
+
+	if (nameInput.value.trim() === '') {
+		nameInput.value = '';
+		nameInput.focus();
+		return false;
+	}
+
+	const data = {
+		nameInput: nameInput.value,
+		descInput: descInput.value,
+		prioridadInput: prioridadInput.value,
+		listaInput: listaInput.value,
+		limiteInput: limiteInput.value
+	}
+
+	fetch('todo/add_tarea', {
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		method: 'POST',
+		body: JSON.stringify({ data }),
+	})
+		.then(res => res.json())
+		.then(data => {
+			window.location = data.redirect;
 		});
 
 	return false;

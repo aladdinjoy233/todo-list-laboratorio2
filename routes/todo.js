@@ -86,6 +86,24 @@ router.post('/add_lista', async (req, res, next) => {
 	res.send({redirect: '/todo'});
 });
 
+router.post('/add_tarea', async (req, res, next) => {
+
+	let { data } = req.body;
+
+	await Tarea.create({
+		titulo: data.nameInput,
+		creacion: new Date(),
+		resolucion: null,
+		descripcion: data.descInput ? data.descInput : null,
+		prioridad: data.prioridadInput,
+		fechaLimite: data.limiteInput ? data.limiteInput : null,
+		estado: 'pendiente',
+		listaId: data.listaInput ? data.listaInput : null
+	});
+
+	res.send({redirect: '/todo'});
+});
+
 // router.post('/add', function(req, res, next) {
 // 	const { cookies } = req;
 
