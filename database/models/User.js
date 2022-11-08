@@ -5,12 +5,19 @@ class User extends Model {};
 
 User.init({
 
-	name: DataTypes.STRING,
-	birthday: DataTypes.DATE
+	id: {
+		type: DataTypes.INTEGER,
+		autoIncrement: true,
+		primaryKey: true
+	},
+	nombre: DataTypes.STRING,
+	usuario: DataTypes.STRING,
+	password: DataTypes.STRING,
 
 }, {
 	sequelize,
 	modelName: 'user',
+	tableName: 'user',
 });
 
 module.exports = User;

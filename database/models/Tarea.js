@@ -21,6 +21,7 @@ Tarea.init({
 		allowNull: false
 	},
 	listaId: DataTypes.INTEGER,
+	userId: DataTypes.INTEGER,
 
 }, {
 	sequelize,

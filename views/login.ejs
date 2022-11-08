@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+
+	<%- include('partials/head') %>
+
+  <body id="index-pg">
+		<form id="form_login" action="/login" method="POST" style="max-width: 40%;">
+			<h2 class="form-title">Login</h2>
+
+			<div class="form-body">
+				<div class="input-group">
+					<label for="usuario_login">Usuario</label>
+					<input type="text" id="usuario_login" name="usuario_login">
+				</div>
+				<div class="input-group">
+					<label for="usuario_pass">Password</label>
+					<input type="password" id="usuario_pass" name="usuario_pass">
+				</div>
+			</div>
+			
+			<div class="form-footer" style="justify-content: center;">
+				<a href="/register" class="footer-btn">Register</a>
+				<input class="footer-btn" type="submit" value="Login">
+			</div>
+		</form>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+	<%- include('partials/head') %>
+
+  <body id="index-pg">
+		<form id="form_register" action="/register" method="POST" style="max-width: 40%;">
+			<h2 class="form-title">Registrarse</h2>
+
+			<div class="form-body">
+				<div class="input-group">
+					<label for="usuario_nombre">Nombre Completo</label>
+					<input type="text" id="usuario_nombre" name="usuario_nombre">
+				</div>
+				<div class="input-group">
+					<label for="usuario_user">Usuario</label>
+					<input type="text" id="usuario_user" name="usuario_user">
+				</div>
+				<div class="input-group">
+					<label for="usuario_pass">Password</label>
+					<input type="password" id="usuario_pass" name="usuario_pass">
+				</div>
+			</div>
+			
+			<div class="form-footer" style="justify-content: center;">
+				<a href="/login" class="footer-btn">Volver al login</a>
+				<input class="footer-btn" type="submit" value="Register">
+			</div>
+		</form>
+  </body>
+</html>

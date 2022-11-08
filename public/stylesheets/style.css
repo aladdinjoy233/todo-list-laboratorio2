@@ -469,6 +469,28 @@ form#form-tarea .form-body {
 	gap: 1rem;
 }
 
+form#form_login .form-body {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+form .form-footer a {
+	color: #2b4554;
+	text-decoration: none;
+}
+
+form .form-footer a:hover {
+	color: rgb(143, 143, 143);
+	text-decoration: underline;
+}
+
+form#form_register .form-body {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
 form.hide-form {
 	display: none;
 }
