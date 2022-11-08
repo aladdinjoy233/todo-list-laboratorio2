@@ -15,11 +15,16 @@
 				<% for (lista of listas) { %>
 
 					<li class="listas-tareas">
-						<div class="lista <%= lista.estado == "resuelto" ? 'completo' : '' %>">
+						<div id="lista-<%= lista.id %>" class="lista <%= lista.estado == "resuelto" ? 'completo' : '' %>">
 							<div class="lista-header">
 								<div class="lista-data">
 									<div class="lista-title"><%= lista.titulo %></div>
-									<div class="lista-fecha">Creado: <%= lista.creacion %></div>
+									<div class="lista-fechas">
+										<div class="lista-fecha">Creado: <%= lista.creacion %></div>
+										<% if (lista.resolucion) { %>
+											<div class="lista-fecha lista-fecha-resolucion">Resuelto: <%= lista.resolucion %></div>
+										<% } %>
+									</div>
 								</div>
 								<a class="lista-settings"><i class="fa-solid fa-ellipsis-vertical"></i></a>
 							</div>
@@ -70,7 +75,7 @@
 										<div class="item-fecha">Limite: <%= tarea.fechaLimite %></div>
 									<% } %>
 									<% if (tarea.resolucion) { %>
-										<div class="item-fecha">Resuelto: <%= tarea.resolucion %></div>
+										<div class="item-fecha fecha-resolucion">Resuelto: <%= tarea.resolucion %></div>
 									<% } %>
 								</div>
 							</div>

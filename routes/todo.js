@@ -33,9 +33,46 @@ router.post('/cambiar_estado/:id', async (req, res, next) => {
 			return;
 		}
 	}
-
 	await cambiarEstado(tarea);
-	res.json(tarea);
+
+	if (tarea.listaId == null) {
+		res.json({tarea, lista: null});
+		return;
+	}
+
+	const lista = await Lista.findByPk(tarea.listaId, {
+		include: [{
+			model: Tarea,
+			as: "tareas"
+		}]
+	});
+
+	let estadoCompleto = tarea.estado == "resuelto" ? true : false;
+
+	if (!estadoCompleto && lista.estado != 'pendiente') {
+		lista.estado = 'pendiente';
+		lista.resolucion = null;
+		await lista.save();
+		res.json({tarea, lista});
+		return;
+	}
+
+	let todasCompletas = true;
+
+	for (const liTarea of lista.tareas) {
+		if (liTarea.estado != 'resuelto') {
+			todasCompletas = false;
+			break;
+		}
+	}
+
+	if (todasCompletas && lista.estado != 'resuelto') {
+		lista.estado = 'resuelto';
+		lista.resolucion = new Date();
+	}
+	await lista.save();
+
+	res.json({tarea, lista});
 });
 
 // router.post('/add', function(req, res, next) {
@@ -89,22 +126,29 @@ router.post('/cambiar_estado/:id', async (req, res, next) => {
 // });
 
 async function obtenerTareas() {
-		// Trae todas las listas con sus tareas
-		const listas = await Lista.findAll({
-			include: [{
-				model: Tarea,
-				as: "tareas"
-			}]
-		});
-	
-		// Trae las demas tareas sin corresponder a una lista
-		const tareas = await Tarea.findAll({
-			where: {
-				listaId: null
-			}
-		})
-	
-		return { listas, tareas };
+	// Trae todas las listas con sus tareas
+	const listas = await Lista.findAll({
+		include: [{
+			model: Tarea,
+			as: "tareas"
+		}],
+		order: [
+			[{ model: Tarea, as: 'tareas' }, 'prioridad', 'ASC']
+		]
+
+	});
+
+	// Trae las demas tareas sin corresponder a una lista
+	const tareas = await Tarea.findAll({
+		where: {
+			listaId: null
+		},
+		order: [
+			['prioridad', 'ASC']
+		]
+	})
+
+	return { listas, tareas };
 }
 
 async function actualizarTareas() {
@@ -122,6 +166,37 @@ async function actualizarTareas() {
 			await cambiarEstado(tarea, fechaTarea);
 		}
 		
+	}
+
+	const listas = await Lista.findAll({
+		include: [{
+			model: Tarea,
+			as: "tareas"
+		}]
+	});
+
+	for (const lista of listas) {
+
+		let todasCompletas = true;
+
+		for (const liTarea of lista.tareas) {
+			if (liTarea.estado != 'resuelto') {
+				todasCompletas = false;
+			}
+		}
+
+		if (todasCompletas && lista.estado != 'resuelto') {
+			lista.estado = 'resuelto';
+			lista.resolucion = hoy;
+		}
+		
+		if (!todasCompletas && lista.estado != 'pendiente') {
+			lista.estado = 'resuelto';
+			lista.resolucion = null;
+		}
+
+		await lista.save();
+
 	}
 }
 

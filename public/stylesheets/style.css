@@ -424,6 +424,12 @@ ul {
 	gap: .5rem;
 }
 
+.lista .lista-fechas {
+	display: flex;
+	align-items: center;
+	gap: .5rem;
+}
+
 .tarea .item .item-fecha {
 	font-size: .9rem;
 	color: #95acb9;
