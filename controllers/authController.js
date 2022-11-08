@@ -9,6 +9,32 @@ exports.register = async (req, res) => {
 	const name = req.body.usuario_nombre;
 	const user = req.body.usuario_user;
 	const pass = req.body.usuario_pass;
+
+	if (user == '' || name == '' || pass == '') {
+		let errorMsg = [];
+
+		name == '' ? errorMsg.push('Nombre no puede ser vacio') : '';
+		user == '' ? errorMsg.push('Usuario no puede ser vacio') : '';
+		pass == '' ? errorMsg.push('Password no puede ser vacia') : '';
+
+		res.render('register', {
+			title: 'Register',
+			error: true,
+			errorMsg
+		})
+	}
+	
+	// Buscar usuario en la base de datos, si existe, retorna error
+	const buscarUser = await User.findOne({ where: { usuario: user } });
+	if (buscarUser != null) {
+		res.render('register', {
+			title: 'Register',
+			error: true,
+			errorMsg: ['El usuario ingresado ya existe']
+		})
+		return;
+	}
+	
 	let passHash = await bcryptjs.hash(pass, 8);
 
 	const usuarioCreado = await User.create({ nombre: name, usuario: user, password: passHash });

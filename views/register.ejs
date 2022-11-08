@@ -8,6 +8,15 @@
 			<h2 class="form-title">Registrarse</h2>
 
 			<div class="form-body">
+
+				<% if (error) { %>
+					<% for (err of errorMsg) { %>
+						<div class="error-message">
+							<%= err %>
+						</div>
+					<% } %>
+				<% } %>
+
 				<div class="input-group">
 					<label for="usuario_nombre">Nombre Completo</label>
 					<input type="text" id="usuario_nombre" name="usuario_nombre">

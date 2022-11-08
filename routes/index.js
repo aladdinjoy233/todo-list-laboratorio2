@@ -13,7 +13,7 @@ router.get('/login', function(req, res, next) {
 });
 
 router.get('/register', function(req, res, next) {
-  res.render('register', { title: 'Register' });
+  res.render('register', { title: 'Register', error: false });
 });
 
 // Routers para los metodos del controlador
