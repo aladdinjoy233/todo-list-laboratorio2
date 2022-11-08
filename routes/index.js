@@ -9,7 +9,7 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/login', function(req, res, next) {
-  res.render('login', { title: 'Login' });
+  res.render('login', { title: 'Login', error: false });
 });
 
 router.get('/register', function(req, res, next) {
@@ -17,6 +17,8 @@ router.get('/register', function(req, res, next) {
 });
 
 // Routers para los metodos del controlador
-router.post('/register', authController.register)
+router.post('/register', authController.register);
+router.post('/login', authController.login);
+router.get('/logout', authController.logout);
 
 module.exports = router;

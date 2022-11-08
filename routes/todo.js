@@ -1,12 +1,14 @@
 var express = require('express');
 var router = express.Router();
 
+var authController = require('../controllers/authController');
+
 var Lista = require('../database/models/Lista');
 var Tarea = require('../database/models/Tarea');
 var { Op } = require('sequelize');
 
 // Main todo page
-router.get('/', async (req, res, next) => {
+router.get('/', authController.isAuthenticated, async (req, res, next) => {
 	await actualizarTareas();
 
 	const {listas, tareas} = await obtenerTareas();

@@ -8,6 +8,15 @@
 			<h2 class="form-title">Login</h2>
 
 			<div class="form-body">
+
+				<% if (error) { %>
+					<% for (err of errorMsg) { %>
+						<div class="error-message">
+							<%= err %>
+						</div>
+					<% } %>
+				<% } %>
+
 				<div class="input-group">
 					<label for="usuario_login">Usuario</label>
 					<input type="text" id="usuario_login" name="usuario_login">
@@ -24,4 +33,5 @@
 			</div>
 		</form>
   </body>
+
 </html>

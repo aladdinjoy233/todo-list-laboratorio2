@@ -10,9 +10,19 @@ User.init({
 		autoIncrement: true,
 		primaryKey: true
 	},
-	nombre: DataTypes.STRING,
-	usuario: DataTypes.STRING,
-	password: DataTypes.STRING,
+	nombre: {
+		type: DataTypes.STRING,
+		allowNull: false
+	},
+	usuario: {
+		type: DataTypes.STRING,
+		unique: true,
+		allowNull: false
+	},
+	password: {
+		type: DataTypes.STRING,
+		allowNull: false
+	},
 
 }, {
 	sequelize,
