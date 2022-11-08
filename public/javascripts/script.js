@@ -45,6 +45,33 @@ function agregar() {
 	return false;
 }
 
+function agregarGrupo() {
+	let nameInput = document.querySelector('#nombre_grupo');
+	const nombreLista = nameInput.value.trim();
+	if (nombreLista === '') {
+		nameInput.value = '';
+		nameInput.focus();
+		return false;
+	}
+
+	fetch('todo/add_lista', {
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		method: 'POST',
+		body: JSON.stringify({ nombreLista }),
+	})
+		.then(res => res.json())
+		.then(data => {
+
+			window.location = data.redirect;
+
+			nameInput.value = '';
+		});
+
+	return false;
+}
+
 function borrar(id) {
 	let list = document.querySelector('ul.task-list');
 
@@ -87,11 +114,41 @@ let creationMenu = document.querySelector('.creation-menu');
 let newBtn = document.querySelector('.new-btn');
 
 newBtn.addEventListener('click', () => {
+
+	if ( !document.querySelector('#form-grupo').classList.contains('hide-form') ||
+			 !document.querySelector('#form-tarea').classList.contains('hide-form')) {
+			return;
+		}
+
 	if (creationMenu.classList.contains('open')) {
 		creationMenu.classList.remove('open');
 	} else {
 		creationMenu.classList.add('open');
 	}
+})
+
+let newTaskBtn = document.querySelector('.new-task');
+let newGroupBtn = document.querySelector('.new-group');
+
+let cancelTaskBtn = document.querySelector('#close-item-form');
+let cencelGroupBtn = document.querySelector('#close-group-form');
+
+newGroupBtn.addEventListener('click', () => {
+	document.querySelector('#form-grupo').classList.remove('hide-form');
+	creationMenu.classList.remove('open');
+})
+
+cencelGroupBtn.addEventListener('click', () => {
+	document.querySelector('#form-grupo').classList.add('hide-form');
+})
+
+newTaskBtn.addEventListener('click', () => {
+	document.querySelector('#form-tarea').classList.remove('hide-form');
+	creationMenu.classList.remove('open');
+})
+
+cancelTaskBtn.addEventListener('click', () => {
+	document.querySelector('#form-tarea').classList.add('hide-form');
 })
 
 const cambiarEstado = tareaId => {

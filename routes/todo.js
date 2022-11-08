@@ -75,6 +75,17 @@ router.post('/cambiar_estado/:id', async (req, res, next) => {
 	res.json({tarea, lista});
 });
 
+router.post('/add_lista', async (req, res, next) => {
+	await Lista.create({
+		titulo: req.body.nombreLista,
+		creacion: new Date(),
+		resolucion: null,
+		estado: 'pendiente'
+	});
+
+	res.send({redirect: '/todo'});
+});
+
 // router.post('/add', function(req, res, next) {
 // 	const { cookies } = req;
 
@@ -176,6 +187,10 @@ async function actualizarTareas() {
 	});
 
 	for (const lista of listas) {
+
+		if (lista.tareas.length == 0) {
+			continue;
+		}
 
 		let todasCompletas = true;
 

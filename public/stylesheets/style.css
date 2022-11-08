@@ -444,3 +444,92 @@ ul {
 	color: #738a97;
 	text-decoration: line-through;
 }
+
+/* Forumlarios */
+
+form {
+	background-color: white;
+	width: 50%;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	z-index: 10;
+	transform: translate(-50%, -50%);
+	padding: 1rem;
+	box-shadow: 7px 11px 34px -11px rgba(0,0,0,0.20);
+	border-radius: 10px;
+
+	display: flex;
+	flex-direction: column;
+}
+
+form#form-tarea .form-body {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
+form.hide-form {
+	display: none;
+}
+
+form .form-title {
+	margin-bottom: 2rem;
+}
+
+form .form-body .input-group {
+	width: 100%;
+}
+
+form .form-body input {
+	width: 100%;
+	border: 1px solid #839caf;
+	border-radius: 5px;
+}
+
+form .form-body input[type="date"] {
+	font-family: "Lucida Grande", Arial, Helvetica, sans-serif;
+}
+
+form .form-body select {
+	padding: 10px 10px;
+	width: 100%;
+	border: 1px solid #839caf;
+	border-radius: 5px;
+	color: #2b4554;
+}
+
+form .form-body .join-inputs {
+	display: flex;
+	align-items: center;
+	gap: .5rem;
+}
+
+form .form-footer {
+	margin-top: 2rem;
+	display: flex;
+	justify-content: flex-end;
+	gap: .5rem;
+}
+
+form .form-footer .footer-btn {
+	padding: .5rem .75rem;
+	background-color: transparent;
+	border: none;
+	cursor: pointer;
+	border-radius: 5px;
+}
+
+form .form-footer #close-group-form:hover {
+	text-decoration: underline;
+	color: #59799b;
+}
+
+form .form-footer input[type="submit"] {
+	background-color: #2b4554;
+	color: white;
+}
+
+form .form-footer input[type="submit"]:hover {
+	background-color: #415e6e;
+}

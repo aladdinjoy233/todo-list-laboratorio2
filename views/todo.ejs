@@ -89,13 +89,78 @@
 				<% } %>
 			<% } %>
 		</ul>
-		<!-- <form onsubmit="return agregar()" class="input-group">
-			<label for="new-task">Add new task</label>
-			<div class="combine-inputs">
-				<input type="text" id="new-task" name="new-task">
-				<input type="submit" value="Submit">
+
+		<!-- Formulario crear grupo -->
+		<form id="form-grupo" class="hide-form" onsubmit="return agregarGrupo()">
+			<h2 class="form-title">Agregar grupo</h2>
+
+			<div class="form-body">
+				<div class="input-group">
+					<label for="nombre_grupo">Nombre del grupo</label>
+					<input type="text" id="nombre_grupo" name="nombre_grupo">
+				</div>
 			</div>
-		</form> -->
+			
+			<div class="form-footer">
+				<input id="close-group-form" class="footer-btn" type="button" value="Cancelar">
+				<input class="footer-btn" type="submit" value="Agregar">
+			</div>
+
+		</form>
+
+		<form id="form-tarea" class="hide-form" onsubmit="return agregar()">
+			<h2 class="form-title">Agregar tarea</h2>
+
+			<div class="form-body">
+
+				<div class="input-group">
+					<label for="nombre_tarea">Nombre</label>
+					<input type="text" id="nombre_tarea" name="nombre_tarea">
+				</div>
+
+				<div class="input-group">
+					<label for="desc_tarea">Descripcion</label>
+					<input type="text" id="desc_tarea" name="desc_tarea">
+				</div>
+
+				<div class="join-inputs">
+					<div class="input-group">
+						<label for="prioridad_tarea">Prioridad</label>
+						<select name="prioridad_tarea" id="prioridad_tarea">
+							<option value="1" selected>Alta</option>
+							<option value="2">Media</option>
+							<option value="3">Baja</option>
+						</select>
+					</div>
+					<div class="input-group">
+						<label for="lista_tarea">Grupo</label>
+						<select name="lista_tarea" id="lista_tarea">
+							<option value="null" selected>Ninguna</option>
+
+							<% if (listas.length > 0) { %>
+								<% for(lista of listas) { %>
+									<option value="<%= lista.id %>"><%= lista.titulo %></option>
+								<% } %>
+							<% } %>
+
+						</select>
+					</div>
+				</div>
+
+				<div class="input-group">
+					<label for="limite_tarea">Fecha Limite</label>
+					<input type="date" id="limite_tarea" name="limite_tarea">
+				</div>
+				
+			</div>
+			
+			<div class="form-footer">
+				<input id="close-item-form" class="footer-btn" type="button" value="Cancelar">
+				<input class="footer-btn" type="submit" value="Agregar">
+			</div>
+
+		</form>
+
 		<div class="creation-menu">
 			<ul class="options">
 				<li class="new-task"><button><i class="fa-solid fa-file"></i></button></li>
