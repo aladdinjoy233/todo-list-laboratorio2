@@ -177,7 +177,9 @@
 	</div>
 
 	<div class="user-info">
-		<div class="username">User: Hardcoded for now</div>
+		<% if (user) { %>
+			<div class="username">Usuario: <%= user.usuario %></div>
+		<% } %>
 		<a href="/logout" class="logout-btn">Log out</a>
 	</div>
 

@@ -76,7 +76,7 @@ exports.isAuthenticated = async (req, res, next) => {
 
 		if (usuario == null) return next();
 
-		req.user = usuario;
+		req.user = await usuario;
 		return next();
 	} else {
 		res.redirect('login');

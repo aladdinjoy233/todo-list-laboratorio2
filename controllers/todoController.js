@@ -9,7 +9,7 @@ exports.index = async (req, res, next) => {
 
 	const {listas, tareas} = await obtenerTareas();
 
-	res.render('todo', { title: 'My todo list | List', tareas, listas });
+	res.render('todo', { title: 'My todo list | List', tareas, listas, user: req.user });
 }
 
 exports.cambiarEstado = async (req, res, next) => {
