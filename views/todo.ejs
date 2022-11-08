@@ -27,6 +27,9 @@
 									</div>
 								</div>
 								<a class="lista-settings"><i class="fa-solid fa-ellipsis-vertical"></i></a>
+								<ul class="submenu">
+									<li onclick="borrarLista('<%= lista.id %>')" class="menu-item">Borrar</li>
+								</ul>
 							</div>
 
 							<% if (lista.tareas.length > 0) { %>
@@ -50,7 +53,7 @@
 													<div class="item-description"><%= tarea.descripcion %></div>
 												<% } %>
 											</div>
-											<a onclick="borrar('<%= tarea.id %>')"><i class="fa-solid fa-trash"></i></a>
+											<a onclick="borrarTarea('<%= tarea.id %>')"><i class="fa-solid fa-trash"></i></a>
 										</li>
 									<% } %>
 								</ul>
@@ -83,7 +86,7 @@
 								<div class="item-description"><%= tarea.descripcion %></div>
 							<% } %>
 						</div>
-						<a onclick="borrar('<%= tarea.id %>')"><i class="fa-solid fa-trash"></i></a>
+						<a onclick="borrarTarea('<%= tarea.id %>')"><i class="fa-solid fa-trash"></i></a>
 					</li>
 					
 				<% } %>

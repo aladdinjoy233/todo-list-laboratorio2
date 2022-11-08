@@ -5,6 +5,7 @@ var Lista = require('../database/models/Lista');
 var Tarea = require('../database/models/Tarea');
 var { Op } = require('sequelize');
 
+// Main todo page
 router.get('/', async (req, res, next) => {
 	await actualizarTareas();
 
@@ -20,6 +21,7 @@ router.get('/obtener', async (req, res, next) => {
 	res.json({listas, tareas});
 });
 
+// POST para cambiar el estado de la tarea (resuelto o pendiente)
 router.post('/cambiar_estado/:id', async (req, res, next) => {
 	let id = req.params.id;
 	const tarea = await Tarea.findByPk(id);
@@ -75,6 +77,7 @@ router.post('/cambiar_estado/:id', async (req, res, next) => {
 	res.json({tarea, lista});
 });
 
+// POST para agregar una lista de tareas
 router.post('/add_lista', async (req, res, next) => {
 	await Lista.create({
 		titulo: req.body.nombreLista,
@@ -86,74 +89,55 @@ router.post('/add_lista', async (req, res, next) => {
 	res.send({redirect: '/todo'});
 });
 
+// POST para agregar una tarea
 router.post('/add_tarea', async (req, res, next) => {
 
 	let { data } = req.body;
 
 	await Tarea.create({
-		titulo: data.nameInput,
+		titulo: data.titulo,
 		creacion: new Date(),
 		resolucion: null,
-		descripcion: data.descInput ? data.descInput : null,
-		prioridad: data.prioridadInput,
-		fechaLimite: data.limiteInput ? data.limiteInput : null,
+		descripcion: data.descripcion ? data.descripcion : null,
+		prioridad: data.prioridad,
+		fechaLimite: data.limite ? data.limite : null,
 		estado: 'pendiente',
-		listaId: data.listaInput ? data.listaInput : null
+		listaId: data.lista ? data.lista : null
 	});
 
 	res.send({redirect: '/todo'});
 });
 
-// router.post('/add', function(req, res, next) {
-// 	const { cookies } = req;
+// POST para borrar una tarea
+router.post('/delete_tarea/:id', async (req, res, next) => {
+	let id = req.params.id;
 
-// 	if ('tasks' in cookies) {
+	const tarea = await Tarea.findByPk(id);
 
-// 		let tasksObj = JSON.parse(cookies.tasks);
-// 		let newId;
-// 		if (tasksObj.tasks.length >= 1) {
-// 			newId = Math.max( ...tasksObj.tasks.map(a => a.id) ) + 1;
-// 		} else {
-// 			newId = 1;
-// 		}
-	
-// 		tasksObj.tasks.push({ id: newId, task: req.body.task });
-// 		res.cookie('tasks', JSON.stringify(tasksObj));
-// 		res.send(JSON.stringify({ id: newId, task: req.body.task }));
-// 	} else {
-// 		let tasksObj = { tasks: [{ id: 1, task: req.body.task }] };
-// 		res.cookie('tasks', JSON.stringify(tasksObj));
-// 		res.send(JSON.stringify({ id: 1, task: req.body.task }));
-// 	}
+	await tarea.destroy();
 
-// });
+	res.send({redirect: '/todo'});
+});
 
-// router.post('/delete/:id', function(req, res, next) {
-// 	const { cookies } = req;
-// 	let id = req.params.id;
+// POST para borrar una lista
+router.post('/delete_lista/:id', async (req, res, next) => {
+	let id = req.params.id;
 
-// 	if (typeof id == 'string') id = Number(id);
+	const lista = await Lista.findByPk(id);
+	const tareas = await Tarea.findAll({ where: { listaId: lista.id	} });
 
-// 	if ('tasks' in cookies) {
+	if (tareas.length > 0) {
+		for (const tarea of tareas) {
+			await tarea.destroy();
+		}
+	}
 
-// 		let tasksObj = JSON.parse(cookies.tasks);
+	await lista.destroy();
+	res.send({redirect: '/todo'});
+});
 
-// 		let idArr = tasksObj.tasks.map(a => a.id);
 
-// 		if (!idArr.includes(id)) return res.status(500).send('Not found');
-
-// 		const indexOfObj = tasksObj.tasks.findIndex(obj => obj.id == id );
-		
-// 		const removedItem = tasksObj.tasks.splice(indexOfObj, 1);
-
-// 		res.cookie('tasks', JSON.stringify(tasksObj));
-// 		res.send(JSON.stringify(removedItem));
-// 	} else {
-// 		res.redirect('/');
-// 	}
-
-// });
-
+// Funciones
 async function obtenerTareas() {
 	// Trae todas las listas con sus tareas
 	const listas = await Lista.findAll({
@@ -207,6 +191,11 @@ async function actualizarTareas() {
 	for (const lista of listas) {
 
 		if (lista.tareas.length == 0) {
+			if (lista.estado == 'resuelto') {
+				lista.estado = 'pendiente';
+				lista.resolucion = null;
+				lista.save();
+			}
 			continue;
 		}
 
@@ -224,7 +213,7 @@ async function actualizarTareas() {
 		}
 		
 		if (!todasCompletas && lista.estado != 'pendiente') {
-			lista.estado = 'resuelto';
+			lista.estado = 'pendiente';
 			lista.resolucion = null;
 		}
 

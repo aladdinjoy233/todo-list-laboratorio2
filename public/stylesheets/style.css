@@ -533,3 +533,40 @@ form .form-footer input[type="submit"] {
 form .form-footer input[type="submit"]:hover {
 	background-color: #415e6e;
 }
+
+/* Lista menu */
+.lista-header {
+	position: relative;
+}
+
+.lista-header .submenu {
+	position: absolute;
+	top: 2rem;
+	right: 0;
+	background-color: white;
+	border-radius: 5px;
+	padding: .5rem 0px;
+	width: 5rem;
+	flex-direction: column;
+	align-items: center;
+	display: none;
+}
+
+.lista-header .submenu.open {
+	display: flex;
+}
+
+#todo-pg .lista-header .submenu .menu-item {
+	background-color: white;
+	cursor: pointer;
+	width: 100%;
+	border-radius: 0px;
+	padding: 5px 10px;
+	margin-bottom: 0px;
+	display: block;
+	text-align: center;
+}
+
+#todo-pg .lista-header .submenu .menu-item:hover {
+	background-color: #dbefff;
+}

@@ -83,11 +83,11 @@ function agregarTarea() {
 	}
 
 	const data = {
-		nameInput: nameInput.value,
-		descInput: descInput.value,
-		prioridadInput: prioridadInput.value,
-		listaInput: listaInput.value,
-		limiteInput: limiteInput.value
+		titulo: nameInput.value,
+		descripcion: descInput.value,
+		prioridad: prioridadInput.value,
+		lista: listaInput.value,
+		limite: limiteInput.value
 	}
 
 	fetch('todo/add_tarea', {
@@ -105,10 +105,8 @@ function agregarTarea() {
 	return false;
 }
 
-function borrar(id) {
-	let list = document.querySelector('ul.task-list');
-
-	fetch(`todo/delete/${id}`, {
+function borrarTarea(id) {
+	fetch(`todo/delete_tarea/${id}`,  {
 		headers: {
 			'Content-Type': 'application/json'
 		},
@@ -116,33 +114,61 @@ function borrar(id) {
 	})
 		.then(res => res.json())
 		.then(data => {
-
-			if (list.querySelectorAll('li').length === 1) {
-				let itemToRemove = document.querySelector(`[data-id="${data[0].id}"]`);
-				itemToRemove.classList.add('anim-out', 'just-slide');
-
-				let emptyListItem = document.createElement('li');
-				emptyListItem.innerHTML = 'No added tasks';
-				emptyListItem.classList.add('empty-list', 'anim-in', 'just-slide');
-
-				setTimeout(() => {
-					list.removeChild(itemToRemove);
-					list.appendChild(emptyListItem);
-				}, 500);
-
-			} else {
-				let itemToRemove = document.querySelector(`[data-id="${data[0].id}"]`);
-				itemToRemove.classList.add('anim-out');
-				setTimeout(() => {
-					list.removeChild(itemToRemove);
-				}, 1000);
-			}
-
+			window.location = data.redirect;
 		});
-
 }
 
-// Agregado para el TP 2
+function borrarLista(id) {
+	console.log(id);
+	fetch(`todo/delete_lista/${id}`,  {
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		method: 'POST',
+	})
+		.then(res => res.json())
+		.then(data => {
+			window.location = data.redirect;
+		});
+}
+
+// function borrar(id) {
+// 	let list = document.querySelector('ul.task-list');
+
+// 	fetch(`todo/delete/${id}`, {
+// 		headers: {
+// 			'Content-Type': 'application/json'
+// 		},
+// 		method: 'POST',
+// 	})
+// 		.then(res => res.json())
+// 		.then(data => {
+
+// 			if (list.querySelectorAll('li').length === 1) {
+// 				let itemToRemove = document.querySelector(`[data-id="${data[0].id}"]`);
+// 				itemToRemove.classList.add('anim-out', 'just-slide');
+
+// 				let emptyListItem = document.createElement('li');
+// 				emptyListItem.innerHTML = 'No added tasks';
+// 				emptyListItem.classList.add('empty-list', 'anim-in', 'just-slide');
+
+// 				setTimeout(() => {
+// 					list.removeChild(itemToRemove);
+// 					list.appendChild(emptyListItem);
+// 				}, 500);
+
+// 			} else {
+// 				let itemToRemove = document.querySelector(`[data-id="${data[0].id}"]`);
+// 				itemToRemove.classList.add('anim-out');
+// 				setTimeout(() => {
+// 					list.removeChild(itemToRemove);
+// 				}, 1000);
+// 			}
+
+// 		});
+
+// }
+
 let creationMenu = document.querySelector('.creation-menu');
 let newBtn = document.querySelector('.new-btn');
 
@@ -252,6 +278,35 @@ const cambiarEstado = tareaId => {
 		});
 }
 
-// fetch(`todo/obtener`)
-// 	.then(res => res.json())
-// 	.then(res => console.log(res));
+// Abrir submenu
+let listaSettingBtns = document.querySelectorAll('.lista-settings');
+let submenus = document.querySelectorAll('.submenu');
+
+let listaBtnClicked = false;
+
+listaSettingBtns.forEach(btn => {
+	btn.addEventListener('click', () => {
+		listaBtnClicked = true;
+		let submenu = btn.nextElementSibling;
+		if (submenu.classList.contains('open')) {
+			submenu.classList.remove('open');
+		} else {
+			submenus.forEach(menu => menu.classList.remove('open'));
+			submenu.classList.add('open');
+		}
+		setTimeout(() => {
+			listaBtnClicked = false;
+		}, 0);
+	})
+})
+
+document.addEventListener('click', event => {
+	const menu = document.querySelector('.submenu.open');
+
+	if (!menu) return;
+	const isClickInside = menu.contains(event.target)
+
+	if (!isClickInside && !listaBtnClicked) {
+		menu.classList.remove('open');
+	}
+})
