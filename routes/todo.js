@@ -102,7 +102,7 @@ router.post('/add_tarea', async (req, res, next) => {
 		prioridad: data.prioridad,
 		fechaLimite: data.limite ? data.limite : null,
 		estado: 'pendiente',
-		listaId: data.lista ? data.lista : null
+		listaId: data.lista == 'null' ? null : data.lista
 	});
 
 	res.send({redirect: '/todo'});
