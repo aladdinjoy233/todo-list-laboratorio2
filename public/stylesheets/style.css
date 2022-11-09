@@ -398,8 +398,17 @@ ul {
 	color: #475d6e;
 }
 
+#todo-pg .lista .sub-tareas li.locked {
+	background-color: #d6d8fd;
+	color: #373950;
+}
+
 .tarea .item {
 	cursor: pointer;
+}
+
+.tarea.locked .item {
+	cursor: initial;
 }
 
 .tarea .item .item-title {
@@ -407,10 +416,18 @@ ul {
 	font-size: 1rem;
 }
 
+.tarea.locked .item .item-title {
+	color: #373950;
+}
+
 .tarea .item .item-description {
 	margin-top: .5rem;
 	font-size: .9rem;
 	color: #738a97;
+}
+
+.tarea .item .item-description {
+	color: #6c70a1;
 }
 
 .tarea .item .item-header {
@@ -436,14 +453,27 @@ ul {
 	color: #95acb9;
 }
 
+.tarea.locked .item .item-fecha {
+	color: #9397c9;
+}
+
 .tarea .item.completo .item-title {
 	color: #738a97;
 	text-decoration: line-through;
 }
 
+.tarea.locked .item.completo .item-title {
+	color: #9397c9;
+}
+
 .lista.completo .lista-title {
 	color: #738a97;
 	text-decoration: line-through;
+}
+
+.tarea.locked .item-usuario {
+	color: #9397c9;
+	margin-top: 0.5rem;
 }
 
 /* Forumlarios */

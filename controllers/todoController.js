@@ -7,9 +7,9 @@ var { Op } = require('sequelize');
 exports.index = async (req, res, next) => {
 	await actualizarTareas();
 
-	const {listas, tareas} = await obtenerTareas(req.user);
+	const tareas = await obtenerTareas(req.user);
 	const allUsers = await obtenerUsuarios(req.user);
-	const allListas = await obtenerListas();
+	const {listas, allListas} = await obtenerListas(req.user);
 
 	res.render('todo', { title: 'My todo list | List', tareas, listas, user: req.user, users: allUsers, allListas });
 }
@@ -126,21 +126,6 @@ exports.borrarTarea = async (req, res, next) => {
 
 // Funciones
 async function obtenerTareas(userActual) {
-	// Trae todas las listas con sus tareas
-	const listas = await Lista.findAll({
-		include: [{
-			model: Tarea,
-			as: "tareas",
-			where: {
-				userId: userActual.id
-			}
-		}],
-		order: [
-			[{ model: Tarea, as: 'tareas' }, 'prioridad', 'ASC']
-		]
-
-	});
-
 	// Trae las demas tareas sin corresponder a una lista
 	const tareas = await Tarea.findAll({
 		where: {
@@ -152,7 +137,7 @@ async function obtenerTareas(userActual) {
 		]
 	})
 
-	return { listas, tareas };
+	return tareas;
 }
 
 async function obtenerUsuarios(userActual) {
@@ -163,8 +148,40 @@ async function obtenerUsuarios(userActual) {
 	});
 }
 
-async function obtenerListas() {
-	return Lista.findAll();
+async function obtenerListas(userActual) {
+	// // Trae todas las listas con sus tareas
+	// const listas = await Lista.findAll({
+	// 	include: [{
+	// 		model: Tarea,
+	// 		as: "tareas",
+	// 		where: {
+	// 			userId: userActual.id
+	// 		}
+	// 	}],
+	// 	order: [
+	// 		[{ model: Tarea, as: 'tareas' }, 'prioridad', 'ASC']
+	// 	]
+
+	// });
+
+	const allListas = await Lista.findAll({
+			include: [{
+				model: Tarea,
+				as: "tareas",
+			}],
+			order: [
+				[{ model: Tarea, as: 'tareas' }, 'prioridad', 'ASC']
+			]
+	});
+
+	let listas = allListas.filter(lista => {
+		for (const tarea of lista.tareas) {
+			if (tarea.userId == userActual.id) return true;
+		}
+		return false;
+	})
+
+	return { listas, allListas };
 }
 
 async function actualizarTareas() {

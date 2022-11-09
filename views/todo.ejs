@@ -5,6 +5,11 @@
 
 <body id="todo-pg">
 
+	<%
+		// Variables
+
+	%>
+
 	<canvas id="gradient-canvas" data-transition-in></canvas>
 
 	<div class="container">
@@ -35,26 +40,55 @@
 							<% if (lista.tareas.length > 0) { %>
 								<ul class="sub-tareas">
 									<% for (tarea of lista.tareas) { %>
-										<li class="tarea">
-											<div id="tarea-<%= tarea.id %>" class="item <%= tarea.estado == "resuelto" ? 'completo' : '' %>" onclick="cambiarEstado(<%= tarea.id %>)">
-												<div class="item-header">
-													<div class="item-title"><%= tarea.titulo %></div>
-													<div class="item-fechas">
-														<div class="item-fecha">Creado: <%= tarea.creacion %></div>
-														<% if (tarea.fechaLimite) { %>
-															<div class="item-fecha">Limite: <%= tarea.fechaLimite %></div>
-														<% } %>
-														<% if (tarea.resolucion) { %>
-															<div class="item-fecha fecha-resolucion">Resuelto: <%= tarea.resolucion %></div>
-														<% } %>
+										<!-- Si la tarea es del usuario... -->
+										<% if(tarea.userId == user.id) { %>
+											<li class="tarea">
+												<div id="tarea-<%= tarea.id %>" class="item <%= tarea.estado == "resuelto" ? 'completo' : '' %>" onclick="cambiarEstado(<%= tarea.id %>)">
+													<div class="item-header">
+														<div class="item-title"><%= tarea.titulo %></div>
+														<div class="item-fechas">
+															<div class="item-fecha">Creado: <%= tarea.creacion %></div>
+															<% if (tarea.fechaLimite) { %>
+																<div class="item-fecha">Limite: <%= tarea.fechaLimite %></div>
+															<% } %>
+															<% if (tarea.resolucion) { %>
+																<div class="item-fecha fecha-resolucion">Resuelto: <%= tarea.resolucion %></div>
+															<% } %>
+														</div>
 													</div>
+													<% if (tarea.descripcion) { %>
+														<div class="item-description"><%= tarea.descripcion %></div>
+													<% } %>
 												</div>
-												<% if (tarea.descripcion) { %>
-													<div class="item-description"><%= tarea.descripcion %></div>
-												<% } %>
-											</div>
-											<a onclick="borrarTarea('<%= tarea.id %>')"><i class="fa-solid fa-trash"></i></a>
-										</li>
+												<a onclick="borrarTarea('<%= tarea.id %>')"><i class="fa-solid fa-trash"></i></a>
+											</li>
+										<!-- Si la tarea NO es del usuario... -->
+										<% } else { %>
+
+											<% const usuarioAsignado = users.find(user => user.id == tarea.userId).usuario %>
+
+											<li class="tarea locked">
+												<div id="tarea-<%= tarea.id %>" class="item <%= tarea.estado == "resuelto" ? 'completo' : '' %>">
+													<div class="item-header">
+														<div class="item-title"><%= tarea.titulo %></div>
+														<div class="item-fechas">
+															<div class="item-fecha">Creado: <%= tarea.creacion %></div>
+															<% if (tarea.fechaLimite) { %>
+																<div class="item-fecha">Limite: <%= tarea.fechaLimite %></div>
+															<% } %>
+															<% if (tarea.resolucion) { %>
+																<div class="item-fecha fecha-resolucion">Resuelto: <%= tarea.resolucion %></div>
+															<% } %>
+														</div>
+													</div>
+													<% if (tarea.descripcion) { %>
+														<div class="item-description"><%= tarea.descripcion %></div>
+													<% } %>
+													<div class="item-usuario">Usuario asignado: <%= usuarioAsignado %></div>
+												</div>
+												<a onclick="borrarTarea('<%= tarea.id %>')"><i class="fa-solid fa-trash"></i></a>
+											</li>
+										<% } %>
 									<% } %>
 								</ul>
 							<% } %>
