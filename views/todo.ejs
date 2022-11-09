@@ -140,8 +140,8 @@
 						<select name="lista_tarea" id="lista_tarea">
 							<option value="null" selected>Ninguna</option>
 
-							<% if (listas.length > 0) { %>
-								<% for(lista of listas) { %>
+							<% if (allListas.length > 0) { %>
+								<% for(lista of allListas) { %>
 									<option value="<%= lista.id %>"><%= lista.titulo %></option>
 								<% } %>
 							<% } %>

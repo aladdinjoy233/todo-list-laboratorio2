@@ -261,7 +261,9 @@ const cambiarEstado = tareaId => {
 				const fechaDiv = listaDiv.querySelector('.lista-fechas');
 				const fecha = listaDiv.querySelector('.lista-fecha-resolucion');
 
-				fechaDiv.removeChild(fecha);
+				if (fecha) {
+					fechaDiv.removeChild(fecha);
+				}
 			}
 
 			// Si se completo la lista, marcar como resuelta

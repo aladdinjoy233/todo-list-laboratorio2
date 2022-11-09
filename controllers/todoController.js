@@ -9,8 +9,9 @@ exports.index = async (req, res, next) => {
 
 	const {listas, tareas} = await obtenerTareas(req.user);
 	const allUsers = await obtenerUsuarios(req.user);
+	const allListas = await obtenerListas();
 
-	res.render('todo', { title: 'My todo list | List', tareas, listas, user: req.user, users: allUsers });
+	res.render('todo', { title: 'My todo list | List', tareas, listas, user: req.user, users: allUsers, allListas });
 }
 
 exports.cambiarEstado = async (req, res, next) => {
@@ -160,6 +161,10 @@ async function obtenerUsuarios(userActual) {
 			id: { [Op.not]: userActual.id }
 		}
 	});
+}
+
+async function obtenerListas() {
+	return Lista.findAll();
 }
 
 async function actualizarTareas() {
