@@ -75,6 +75,7 @@ function agregarTarea() {
 	let prioridadInput = document.querySelector('#prioridad_tarea');
 	let listaInput = document.querySelector('#lista_tarea');
 	let limiteInput = document.querySelector('#limite_tarea');
+	let userInput = document.querySelector('#usuario_tarea');
 
 	if (nameInput.value.trim() === '') {
 		nameInput.value = '';
@@ -87,7 +88,8 @@ function agregarTarea() {
 		descripcion: descInput.value,
 		prioridad: prioridadInput.value,
 		lista: listaInput.value,
-		limite: limiteInput.value
+		limite: limiteInput.value,
+		userId: userInput.value,
 	}
 
 	fetch('todo/add_tarea', {

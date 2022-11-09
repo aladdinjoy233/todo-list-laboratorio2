@@ -150,6 +150,22 @@
 					</div>
 				</div>
 
+				<% if (user) { %>
+					<div class="input-group">
+						<label for="usuario_tarea">Usuario</label>
+						<select name="usuario_tarea" id="usuario_tarea">
+							<option value="<%= user.id %>" selected><%= user.usuario %></option>
+
+							<% if (users.length > 0) { %>
+								<% for(u of users) { %>
+									<option value="<%= u.id %>"><%= u.usuario %></option>
+								<% } %>
+							<% } %>
+							
+						</select>
+					</div>
+				<% } %>
+
 				<div class="input-group">
 					<label for="limite_tarea">Fecha Limite</label>
 					<input type="date" id="limite_tarea" name="limite_tarea">

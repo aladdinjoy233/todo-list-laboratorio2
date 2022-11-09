@@ -10,12 +10,21 @@ Tarea.init({
 		autoIncrement: true,
 		primaryKey: true
 	},
-	titulo: DataTypes.STRING,
-	creacion: DataTypes.DATE,
-	resolucion: DataTypes.DATE,
+	titulo: {
+		type: DataTypes.STRING,
+		allowNull: false
+	},
+	creacion: {
+		type: DataTypes.DATEONLY,
+		allowNull: false
+	},
+	resolucion: DataTypes.DATEONLY,
 	descripcion: DataTypes.STRING,
-	prioridad: DataTypes.INTEGER,
-	fechaLimite: DataTypes.DATE,
+	prioridad: {
+		type: DataTypes.INTEGER,
+		defaultValue: 1
+	},
+	fechaLimite: DataTypes.DATEONLY,
 	estado: {
 		type: DataTypes.STRING,
 		allowNull: false

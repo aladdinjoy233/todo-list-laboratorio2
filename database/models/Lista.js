@@ -11,8 +11,8 @@ Lista.init({
 		primaryKey: true
 	},
 	titulo: DataTypes.STRING,
-	creacion: DataTypes.DATE,
-	resolucion: DataTypes.DATE,
+	creacion: DataTypes.DATEONLY,
+	resolucion: DataTypes.DATEONLY,
 	estado: {
 		type: DataTypes.STRING,
 		allowNull: false

@@ -7,9 +7,10 @@ var { Op } = require('sequelize');
 exports.index = async (req, res, next) => {
 	await actualizarTareas();
 
-	const {listas, tareas} = await obtenerTareas();
+	const {listas, tareas} = await obtenerTareas(req.user);
+	const allUsers = await obtenerUsuarios(req.user);
 
-	res.render('todo', { title: 'My todo list | List', tareas, listas, user: req.user });
+	res.render('todo', { title: 'My todo list | List', tareas, listas, user: req.user, users: allUsers });
 }
 
 exports.cambiarEstado = async (req, res, next) => {
@@ -89,7 +90,8 @@ exports.agregarTarea = async (req, res, next) => {
 		prioridad: data.prioridad,
 		fechaLimite: data.limite ? data.limite : null,
 		estado: 'pendiente',
-		listaId: data.lista == 'null' ? null : data.lista
+		listaId: data.lista == 'null' ? null : data.lista,
+		userId: data.userId
 	});
 
 	res.send({redirect: '/todo'});
@@ -122,12 +124,15 @@ exports.borrarTarea = async (req, res, next) => {
 }
 
 // Funciones
-async function obtenerTareas() {
+async function obtenerTareas(userActual) {
 	// Trae todas las listas con sus tareas
 	const listas = await Lista.findAll({
 		include: [{
 			model: Tarea,
-			as: "tareas"
+			as: "tareas",
+			where: {
+				userId: userActual.id
+			}
 		}],
 		order: [
 			[{ model: Tarea, as: 'tareas' }, 'prioridad', 'ASC']
@@ -138,7 +143,8 @@ async function obtenerTareas() {
 	// Trae las demas tareas sin corresponder a una lista
 	const tareas = await Tarea.findAll({
 		where: {
-			listaId: null
+			listaId: null,
+			userId: userActual.id
 		},
 		order: [
 			['prioridad', 'ASC']
@@ -146,6 +152,14 @@ async function obtenerTareas() {
 	})
 
 	return { listas, tareas };
+}
+
+async function obtenerUsuarios(userActual) {
+	return User.findAll({
+		where: {
+			id: { [Op.not]: userActual.id }
+		}
+	});
 }
 
 async function actualizarTareas() {
