@@ -426,8 +426,8 @@ ul {
 	color: #738a97;
 }
 
-.tarea .item .item-description {
-	color: #6c70a1;
+.tarea.locked .item .item-description {
+	color: #717495;
 }
 
 .tarea .item .item-header {
@@ -474,6 +474,7 @@ ul {
 .tarea.locked .item-usuario {
 	color: #9397c9;
 	margin-top: 0.5rem;
+	font-weight: bold;
 }
 
 /* Forumlarios */
