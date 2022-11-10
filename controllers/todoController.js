@@ -5,8 +5,6 @@ var { Op } = require('sequelize');
 
 // Vistas
 exports.index = async (req, res, next) => {
-
-	console.log(req.user);
 	if (!req.user) return res.redirect('/')
 
 
