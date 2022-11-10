@@ -5,6 +5,11 @@ var { Op } = require('sequelize');
 
 // Vistas
 exports.index = async (req, res, next) => {
+
+	console.log(req.user);
+	if (!req.user) return res.redirect('/')
+
+
 	await actualizarTareas();
 
 	const tareas = await obtenerTareas(req.user);
@@ -130,7 +135,7 @@ async function obtenerTareas(userActual) {
 	const tareas = await Tarea.findAll({
 		where: {
 			listaId: null,
-			userId: userActual.id
+			userId: userActual.id // ERROR
 		},
 		order: [
 			['prioridad', 'ASC']
