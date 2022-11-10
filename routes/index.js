@@ -16,8 +16,8 @@ router.get('/register', function(req, res, next) {
   res.render('register', { title: 'Register', error: false });
 });
 
-// Routers para los metodos del controlador
-router.post('/register', authController.register);
+// Routers del passport
+router.post('/register', authController.signup)
 router.post('/login', authController.login);
 router.get('/logout', authController.logout);
 

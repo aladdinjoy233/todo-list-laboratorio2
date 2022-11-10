@@ -6,6 +6,8 @@ var logger = require('morgan');
 var sequelize = require('./database/db');
 require('./database/asociations');
 
+require('./auth/auth');
+
 var indexRouter = require('./routes/index');
 var todoRouter = require('./routes/todo');
 var usersRouter = require('./routes/users');

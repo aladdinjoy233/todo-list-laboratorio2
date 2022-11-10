@@ -1,98 +1,57 @@
 const jwt = require('jsonwebtoken');
-const bcryptjs = require('bcryptjs');
 var User = require('../database/models/User');
 const { promisify } = require('util');
 const { jwtConfig } = require('../config');
 
-// Procedimiento para registarse
-exports.register = async (req, res) => {
-	const name = req.body.usuario_nombre;
-	const user = req.body.usuario_user;
-	const pass = req.body.usuario_pass;
+const passport = require('passport');
 
-	if (user == '' || name == '' || pass == '') {
-		let errorMsg = [];
+exports.signup = (req, res, next) => {
+	passport.authenticate('signup', { session: false }, (err, user, info) => {
+		if (err) return next(err)
 
-		name == '' ? errorMsg.push('Nombre no puede ser vacio') : '';
-		user == '' ? errorMsg.push('Usuario no puede ser vacio') : '';
-		pass == '' ? errorMsg.push('Password no puede ser vacia') : '';
+		if (!user) {
 
-		res.render('register', {
-			title: 'Register',
-			error: true,
-			errorMsg
-		})
-	}
-	
-	// Buscar usuario en la base de datos, si existe, retorna error
-	const buscarUser = await User.findOne({ where: { usuario: user } });
-	if (buscarUser != null) {
-		res.render('register', {
-			title: 'Register',
-			error: true,
-			errorMsg: ['El usuario ingresado ya existe']
-		})
-		return;
-	}
-	
-	let passHash = await bcryptjs.hash(pass, 8);
+			// Si da el error de missing credentials, devlolver
+			if (info.message == 'Missing credentials')
+				return res.render('register', { title: 'Register', error: true, errorMsg: ['Campos no pueden ser vacios'] })
 
-	const usuarioCreado = await User.create({ nombre: name, usuario: user, password: passHash });
-
-	res.redirect('/login');
-};
-
-exports.login = async (req, res) => {
-	const user = req.body.usuario_login;
-	const pass = req.body.usuario_pass;
-
-	if (user == '' || pass == '') {
-
-		let errorMsg = [];
-
-		user == '' ? errorMsg.push('Usuario no puede ser vacio') : '';
-		pass == '' ? errorMsg.push('Password no puede ser vacia') : '';
-
-		res.render('login', {
-			title: 'Login',
-			error: true,
-			errorMsg
-		})
-	} else {
-		const usuario = await User.findOne({ where: { usuario: user } });
-
-		if (usuario == null) {
-			res.render('login', {
-				title: 'Login',
-				error: true,
-				errorMsg: ['Usuario no encontrado']
-			})
-			return;
+			return res.render('register', { title: 'Register', error: true, errorMsg: [info.message] })
 		}
 		
-		if (!(await bcryptjs.compare(pass, usuario.password))) {
-			res.render('login', {
-				title: 'Login',
-				error: true,
-				errorMsg: ['Password equivocado']
+		res.redirect('login')
+
+	})(req, res, next)
+}
+
+exports.login = (req, res, next) => {
+	passport.authenticate('login', async (err, user, info) => {
+		try {
+			// Si hay error, dar error
+			if (err) return next(err);
+			
+			// Si no hay un usuario, dar error del auth.js
+			if (!user) return res.render('login', { title: 'Login', error: true, errorMsg: [info.message] })
+			
+			req.login(user, { session: false }, async (err) => {
+				if (err) return next(err)
+
+				const id = user.id;
+				const token = jwt.sign({ id }, jwtConfig.secret);
+
+				const cookieOptions = {
+					expires: new Date(Date.now() + jwtConfig.cookieExpireTime * 24 * 60 * 60 * 1000),
+					httpOnly: true
+				}
+
+				res.cookie('jwt', token, cookieOptions);
+				return res.redirect('/todo');
 			})
-			return;
+
+		} catch(err) {
+			return next(err)
 		}
-
-		const id = usuario.id;
-		const token = jwt.sign({ id }, jwtConfig.secret, { expiresIn: jwtConfig.expireTime });
-
-		const cookieOptions = {
-			expires: new Date(Date.now() + jwtConfig.cookieExpireTime * 24 * 60 * 60 * 1000),
-			httpOnly: true
-		}
-
-		res.cookie('jwt', token, cookieOptions);
-		res.redirect('/todo');
-
-	}
-
-};
+	})(req, res, next)
+}
 
 exports.isAuthenticated = async (req, res, next) => {
 	if (req.cookies.jwt) {
