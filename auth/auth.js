@@ -2,6 +2,10 @@ const passport = require('passport')
 const localStrategy = require('passport-local').Strategy
 const bcryptjs = require('bcryptjs')
 
+// Necesario para Google
+var GoogleStrategy = require('passport-google-oidc');
+const { googleConfig } = require('../config');
+
 const User = require('../database/models/User')
 
 passport.use('signup', new localStrategy({
@@ -41,5 +45,28 @@ passport.use('login', new localStrategy({
 		if (!validate) return done(null, false, { message: 'Contraseña equivocado' })
 
 		return done(null, user, { message: 'Se pude logear!' });
+	}
+));
+
+// Logeo google
+passport.use('auth-google',
+	new GoogleStrategy({
+		clientID: googleConfig.GOOGLE_CLIENT_ID,
+		clientSecret: googleConfig.GOOGLE_CLIENT_SECRET,
+		callbackURL: 'http://127.0.0.1:3000/login/google'
+	},
+	async function verify(issuer, profile, done) {
+
+		const user = await User.findOne({ where: { usuario: profile.emails[0].value } });
+
+		// Si no existe el usuario, crealo!
+		if (user == null) {
+			const inventedPass = await bcryptjs.hash(profile.id, 8)
+			const userNuevo = User.create({ nombre: profile.displayName, usuario: profile.emails[0].value, password: inventedPass })
+
+			done(null, userNuevo);
+		} else { // Si existe, logeate entoncess
+			done(null, user);
+		}
 	}
 ));

@@ -4,13 +4,14 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var sequelize = require('./database/db');
+var session = require('express-session');
 require('./database/asociations');
 
+// Autenticar al usuario
 require('./auth/auth');
 
 var indexRouter = require('./routes/index');
 var todoRouter = require('./routes/todo');
-var usersRouter = require('./routes/users');
 
 var app = express();
 
@@ -22,6 +23,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({ secret: 'SECRET' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);

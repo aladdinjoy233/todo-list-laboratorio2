@@ -521,6 +521,51 @@ form .form-footer a:hover {
 	text-decoration: underline;
 }
 
+form .form-footer .btn-group {
+	display: flex;
+	justify-content: center;
+}
+
+form .form-footer .footer-btn.google-btn {
+	margin-top: 1rem;
+	width: 12rem;
+	background-color: white;
+	box-shadow: 7px 11px 34px -11px rgb(0 0 0 / 40%);
+	padding: .75rem .75rem;
+	transition: all 250ms ease;
+}
+
+form .form-footer .footer-btn.google-btn i {
+	margin-right: .5rem;
+	transition: all 150ms ease;
+}
+
+form .form-footer .footer-btn.google-btn:hover {
+	background-color: #4c97d9;
+	color: white;
+	text-decoration: none;
+}
+
+form .form-footer .footer-btn.google-btn:hover i {
+	animation: dance 1s ease infinite;
+}
+
+@keyframes dance {
+	0% {
+		transform: translateX(0px) rotate(0deg);
+		transform: ;
+	}
+	25% {
+		transform: translateX(4px) rotate(45deg);
+	}
+	50% {
+		transform: translateX(-4px) rotate(-45deg);
+	}
+	100% {
+		transform: translateX(0px) rotate(0deg);
+	}
+}
+
 form#form_register .form-body {
 	display: flex;
 	flex-direction: column;
@@ -657,3 +702,4 @@ form .form-footer input[type="submit"]:hover {
 .user-info .logout-btn:hover {
 	background-color: #415e6e;
 }
+
