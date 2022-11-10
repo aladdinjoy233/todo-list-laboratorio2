@@ -553,7 +553,6 @@ form .form-footer .footer-btn.google-btn:hover i {
 @keyframes dance {
 	0% {
 		transform: translateX(0px) rotate(0deg);
-		transform: ;
 	}
 	25% {
 		transform: translateX(4px) rotate(45deg);
