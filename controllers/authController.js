@@ -65,7 +65,6 @@ exports.isAuthenticated = async (req, res, next) => {
 		return next();
 	} else {
 		return res.redirect('login');
-		// next();
 	}
 }
 
@@ -106,4 +105,19 @@ exports.googleLogin = (req, res, next) => {
 		})
 
 	})(req, res, next)
+}
+
+exports.verificarSession = async (req, res, next) => {
+	if (req.cookies.jwt) {
+		const decodificada = await promisify(jwt.verify)(req.cookies.jwt, jwtConfig.secret);
+
+		const usuario = User.findByPk(decodificada.id);
+
+		if (usuario == null) return next();
+
+		req.user = await usuario;
+		return res.redirect('/todo');
+	} else {
+		return next();
+	}
 }

@@ -4,15 +4,15 @@ var router = express.Router()
 const authController = require('../controllers/authController')
 
 // Routers para las vistas
-router.get('/', function(req, res, next) {
+router.get('/', (req, res, next) => {
   res.render('index', { title: 'My todo list' })
 })
 
-router.get('/login', function(req, res, next) {
+router.get('/login', authController.verificarSession, (req, res, next) => {
   res.render('login', { title: 'Login', error: false })
 })
 
-router.get('/register', function(req, res, next) {
+router.get('/register', authController.verificarSession, (req, res, next) => {
   res.render('register', { title: 'Register', error: false })
 })
 
