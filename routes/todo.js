@@ -22,4 +22,10 @@ router.post('/delete_lista/:id', authController.isAuthenticated, todoController.
 // POST para borrar una tarea
 router.post('/delete_tarea/:id', authController.isAuthenticated, todoController.borrarTarea)
 
+// POST para obtener una tarea
+router.get('/obtener_tarea/:id', authController.isAuthenticated, todoController.obtenerTarea)
+
+// POST para editar una tarea
+router.post('/editar_tarea/:id', authController.isAuthenticated, todoController.editarTarea)
+
 module.exports = router;

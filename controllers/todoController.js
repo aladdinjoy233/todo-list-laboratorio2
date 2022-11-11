@@ -124,6 +124,27 @@ exports.borrarTarea = async (req, res, next) => {
 	res.send({redirect: '/todo'});
 }
 
+exports.obtenerTarea = async (req, res, next) => {
+	let id = req.params.id;
+	return res.json(await Tarea.findByPk(id));
+}
+
+exports.editarTarea = async (req, res, next) => {
+	const id = req.params.id;
+	const { data } = req.body;
+
+	await Tarea.update({
+		titulo: data.titulo,
+		descripcion: data.descripcion ? data.descripcion : null,
+		prioridad: data.prioridad,
+		fechaLimite: data.limite ? data.limite : null,
+		listaId: data.lista == 'null' ? null : data.lista,
+		userId: data.userId
+	}, { where: { id } });
+
+	res.send({redirect: '/todo'});
+}
+
 // Funciones
 async function obtenerTareas(userActual) {
 	// Trae las demas tareas sin corresponder a una lista
@@ -149,20 +170,6 @@ async function obtenerUsuarios(userActual) {
 }
 
 async function obtenerListas(userActual) {
-	// // Trae todas las listas con sus tareas
-	// const listas = await Lista.findAll({
-	// 	include: [{
-	// 		model: Tarea,
-	// 		as: "tareas",
-	// 		where: {
-	// 			userId: userActual.id
-	// 		}
-	// 	}],
-	// 	order: [
-	// 		[{ model: Tarea, as: 'tareas' }, 'prioridad', 'ASC']
-	// 	]
-
-	// });
 
 	const allListas = await Lista.findAll({
 			include: [{

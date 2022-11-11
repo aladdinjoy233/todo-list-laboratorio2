@@ -5,11 +5,6 @@
 
 <body id="todo-pg">
 
-	<%
-		// Variables
-
-	%>
-
 	<canvas id="gradient-canvas" data-transition-in></canvas>
 
 	<div class="container">
@@ -60,7 +55,10 @@
 														<div class="item-description"><%= tarea.descripcion %></div>
 													<% } %>
 												</div>
-												<a onclick="borrarTarea('<%= tarea.id %>')"><i class="fa-solid fa-trash"></i></a>
+												<div class="tarea-options">
+													<a onclick="abrirEditar('<%= tarea.id %>')"><i class="fa-solid fa-pen"></i></a>
+													<a onclick="borrarTarea('<%= tarea.id %>')"><i class="fa-solid fa-trash"></i></a>
+												</div>
 											</li>
 										<!-- Si la tarea NO es del usuario... -->
 										<% } else { %>
@@ -86,7 +84,10 @@
 													<% } %>
 													<div class="item-usuario">Usuario asignado: <%= usuarioAsignado %></div>
 												</div>
-												<a onclick="borrarTarea('<%= tarea.id %>')"><i class="fa-solid fa-trash"></i></a>
+												<div class="tarea-options">
+													<a onclick="abrirEditar('<%= tarea.id %>')"><i class="fa-solid fa-pen"></i></a>
+													<a onclick="borrarTarea('<%= tarea.id %>')"><i class="fa-solid fa-trash"></i></a>
+												</div>
 											</li>
 										<% } %>
 									<% } %>
@@ -120,7 +121,10 @@
 								<div class="item-description"><%= tarea.descripcion %></div>
 							<% } %>
 						</div>
-						<a onclick="borrarTarea('<%= tarea.id %>')"><i class="fa-solid fa-trash"></i></a>
+						<div class="tarea-options">
+							<a onclick="abrirEditar('<%= tarea.id %>')"><i class="fa-solid fa-pen"></i></a>
+							<a onclick="borrarTarea('<%= tarea.id %>')"><i class="fa-solid fa-trash"></i></a>
+						</div>
 					</li>
 					
 				<% } %>
@@ -233,6 +237,77 @@
 		<div class="form-footer">
 			<input id="close-item-form" class="footer-btn" type="button" value="Cancelar">
 			<input class="footer-btn" type="submit" value="Agregar">
+		</div>
+
+	</form>
+
+	<!-- Formulario editar tarea -->
+	<form id="form-edit" class="hide-form" onsubmit="return editarTarea()">
+		<h2 class="form-title">Editar tarea</h2>
+
+		<div class="form-body">
+			<input type="hidden" id="id_edit" name="id_edit" value="">
+
+			<div class="input-group">
+				<label for="nombre_edit">Nombre</label>
+				<input type="text" id="nombre_edit" name="nombre_edit">
+			</div>
+
+			<div class="input-group">
+				<label for="desc_edit">Descripcion</label>
+				<input type="text" id="desc_edit" name="desc_edit">
+			</div>
+
+			<div class="join-inputs">
+				<div class="input-group">
+					<label for="prioridad_edit">Prioridad</label>
+					<select name="prioridad_edit" id="prioridad_edit">
+						<option value="1" selected>Alta</option>
+						<option value="2">Media</option>
+						<option value="3">Baja</option>
+					</select>
+				</div>
+				<div class="input-group">
+					<label for="lista_edit">Grupo</label>
+					<select name="lista_edit" id="lista_edit">
+						<option value="null">Ninguna</option>
+
+						<% if (allListas.length > 0) { %>
+							<% for(lista of allListas) { %>
+								<option value="<%= lista.id %>"><%= lista.titulo %></option>
+							<% } %>
+						<% } %>
+
+					</select>
+				</div>
+			</div>
+
+			<% if (user) { %>
+				<div class="input-group">
+					<label for="user_edit">Usuario</label>
+					<select name="user_edit" id="user_edit">
+						<option value="<%= user.id %>"><%= user.usuario %></option>
+
+						<% if (users.length > 0) { %>
+							<% for(u of users) { %>
+								<option value="<%= u.id %>"><%= u.usuario %></option>
+							<% } %>
+						<% } %>
+						
+					</select>
+				</div>
+			<% } %>
+
+			<div class="input-group">
+				<label for="limite_edit">Fecha Limite</label>
+				<input type="date" id="limite_edit" name="limite_edit">
+			</div>
+			
+		</div>
+		
+		<div class="form-footer">
+			<input id="close-edit-form" class="footer-btn" type="button" value="Cancelar">
+			<input class="footer-btn" type="submit" value="Editar">
 		</div>
 
 	</form>

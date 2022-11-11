@@ -501,6 +501,12 @@ form#form-tarea .form-body {
 	gap: 1rem;
 }
 
+form#form-edit .form-body {
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}
+
 form#form_login .form-body {
 	display: flex;
 	flex-direction: column;
@@ -774,4 +780,9 @@ form .form-footer .footer-btn.google-btn:active {
 .dark-overlay.show {
 	display: block;
 	backdrop-filter: blur(10px) opacity(1);
+}
+
+.tarea-options {
+	display: flex;
+	gap: 1rem;
 }

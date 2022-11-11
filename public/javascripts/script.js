@@ -1,50 +1,3 @@
-function listItemTemplate(id, task) {
-	let li = document.createElement('li');
-	li.innerHTML = `${task}<a onclick="borrar(${id})"><i class="fa-solid fa-trash"></i></a>`
-	li.classList.add('anim-in');
-	li.dataset.id = id;
-	return li;
-}
-
-function agregar() {
-	let input = document.querySelector('#new-task');
-	const task = input.value.trim();
-	if (task === '') {
-		input.value = '';
-		input.focus();
-		return false;
-	}
-	let list = document.querySelector('ul.task-list');
-
-	fetch('todo/add', {
-		headers: {
-			'Content-Type': 'application/json'
-		},
-		method: 'POST',
-		body: JSON.stringify({ task }),
-	})
-		.then(res => res.json())
-		.then(data => {
-
-			const emptyLi = list.querySelector('.empty-list');
-			if (emptyLi) {
-				emptyLi.classList.add('anim-out', 'just-slide');
-				setTimeout(() => {
-					list.removeChild(emptyLi)
-					let listItem = listItemTemplate(data.id, data.task);
-					listItem.classList.add('just-slide')
-					list.appendChild(listItem);
-				}, 500);
-			} else {
-				list.appendChild(listItemTemplate(data.id, data.task));
-			}
-
-			input.value = '';
-		});
-
-	return false;
-}
-
 function agregarGrupo() {
 	let nameInput = document.querySelector('#nombre_grupo');
 	const nombreLista = nameInput.value.trim();
@@ -156,6 +109,7 @@ let newGroupBtn = document.querySelector('.new-group');
 
 let cancelTaskBtn = document.querySelector('#close-item-form');
 let cencelGroupBtn = document.querySelector('#close-group-form');
+let cencelEditBtn = document.querySelector('#close-edit-form');
 
 let darkOverlay = document.querySelector('.dark-overlay');
 
@@ -178,6 +132,11 @@ newTaskBtn.addEventListener('click', () => {
 
 cancelTaskBtn.addEventListener('click', () => {
 	document.querySelector('#form-tarea').classList.add('hide-form');
+	darkOverlay.classList.remove('show');
+})
+
+cencelEditBtn.addEventListener('click', () => {
+	document.querySelector('#form-edit').classList.add('hide-form');
 	darkOverlay.classList.remove('show');
 })
 
@@ -283,3 +242,74 @@ document.addEventListener('click', event => {
 		menu.classList.remove('open');
 	}
 })
+
+function abrirEditar(id) {
+
+	fetch(`todo/obtener_tarea/${id}`)
+		.then(res => res.json())
+		.then(res => {
+
+			// Obtener todos los inputs y llenarlos con informacion
+			const editarForm     = document.querySelector('#form-edit');
+			const idInput        = editarForm.id_edit;
+			const nombreInput    = editarForm.nombre_edit;
+			const descInput      = editarForm.desc_edit;
+			const prioridadInput = editarForm.prioridad_edit;
+			const listaInput     = editarForm.lista_edit;
+			const userInput      = editarForm.user_edit;
+			const limiteInput    = editarForm.limite_edit;
+
+			idInput.value        = res.id;
+			nombreInput.value    = res.titulo;
+			descInput.value      = res.descripcion ? res.descripcion : '';
+			prioridadInput.value = res.prioridad;
+			listaInput.value     = res.listaId;
+			userInput.value      = res.userId;
+			limiteInput.value    = res.fechaLimite;
+
+			document.querySelector('#form-edit').classList.remove('hide-form');
+			darkOverlay.classList.add('show');
+			creationMenu.classList.remove('open');
+		})
+}
+
+function editarTarea() {
+	// Obtener todos los inputs
+	const editarForm     = document.querySelector('#form-edit');
+	const idInput        = editarForm.id_edit;
+	const nombreInput    = editarForm.nombre_edit;
+	const descInput      = editarForm.desc_edit;
+	const prioridadInput = editarForm.prioridad_edit;
+	const listaInput     = editarForm.lista_edit;
+	const userInput      = editarForm.user_edit;
+	const limiteInput    = editarForm.limite_edit;
+
+	if (nombreInput.value.trim() === '') {
+		nombreInput.value = '';
+		nombreInput.focus();
+		return false;
+	}
+
+	const data = {
+		titulo: nombreInput.value,
+		descripcion: descInput.value,
+		prioridad: prioridadInput.value,
+		lista: listaInput.value,
+		userId: userInput.value,
+		limite: limiteInput.value,
+	}
+
+	fetch(`todo/editar_tarea/${idInput.value}`, {
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		method: 'POST',
+		body: JSON.stringify({ data }),
+	})
+		.then(res => res.json())
+		.then(data => {
+			window.location = data.redirect;
+		});
+
+	return false;
+}
