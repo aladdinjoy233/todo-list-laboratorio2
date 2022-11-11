@@ -127,93 +127,6 @@
 			<% } %>
 		</ul>
 
-		<!-- Formulario crear grupo -->
-		<form id="form-grupo" class="hide-form" onsubmit="return agregarGrupo()">
-			<h2 class="form-title">Agregar grupo</h2>
-
-			<div class="form-body">
-				<div class="input-group">
-					<label for="nombre_grupo">Nombre del grupo</label>
-					<input type="text" id="nombre_grupo" name="nombre_grupo">
-				</div>
-			</div>
-			
-			<div class="form-footer">
-				<input id="close-group-form" class="footer-btn" type="button" value="Cancelar">
-				<input class="footer-btn" type="submit" value="Agregar">
-			</div>
-
-		</form>
-
-		<form id="form-tarea" class="hide-form" onsubmit="return agregarTarea()">
-			<h2 class="form-title">Agregar tarea</h2>
-
-			<div class="form-body">
-
-				<div class="input-group">
-					<label for="nombre_tarea">Nombre</label>
-					<input type="text" id="nombre_tarea" name="nombre_tarea">
-				</div>
-
-				<div class="input-group">
-					<label for="desc_tarea">Descripcion</label>
-					<input type="text" id="desc_tarea" name="desc_tarea">
-				</div>
-
-				<div class="join-inputs">
-					<div class="input-group">
-						<label for="prioridad_tarea">Prioridad</label>
-						<select name="prioridad_tarea" id="prioridad_tarea">
-							<option value="1" selected>Alta</option>
-							<option value="2">Media</option>
-							<option value="3">Baja</option>
-						</select>
-					</div>
-					<div class="input-group">
-						<label for="lista_tarea">Grupo</label>
-						<select name="lista_tarea" id="lista_tarea">
-							<option value="null" selected>Ninguna</option>
-
-							<% if (allListas.length > 0) { %>
-								<% for(lista of allListas) { %>
-									<option value="<%= lista.id %>"><%= lista.titulo %></option>
-								<% } %>
-							<% } %>
-
-						</select>
-					</div>
-				</div>
-
-				<% if (user) { %>
-					<div class="input-group">
-						<label for="usuario_tarea">Usuario</label>
-						<select name="usuario_tarea" id="usuario_tarea">
-							<option value="<%= user.id %>" selected><%= user.usuario %></option>
-
-							<% if (users.length > 0) { %>
-								<% for(u of users) { %>
-									<option value="<%= u.id %>"><%= u.usuario %></option>
-								<% } %>
-							<% } %>
-							
-						</select>
-					</div>
-				<% } %>
-
-				<div class="input-group">
-					<label for="limite_tarea">Fecha Limite</label>
-					<input type="date" id="limite_tarea" name="limite_tarea">
-				</div>
-				
-			</div>
-			
-			<div class="form-footer">
-				<input id="close-item-form" class="footer-btn" type="button" value="Cancelar">
-				<input class="footer-btn" type="submit" value="Agregar">
-			</div>
-
-		</form>
-
 		<div class="creation-menu">
 			<ul class="options">
 				<li class="new-task"><button><i class="fa-solid fa-file"></i></button></li>
@@ -226,12 +139,103 @@
 		</div>
 	</div>
 
+	<!-- Informacion del usuario -->
 	<div class="user-info">
 		<% if (user) { %>
 			<div class="username">Usuario: <%= user.usuario %></div>
 		<% } %>
 		<a href="/logout" class="logout-btn">Log out</a>
 	</div>
+
+	<div class="dark-overlay"></div>
+	
+	<!-- Formulario crear grupo -->
+	<form id="form-grupo" class="hide-form" onsubmit="return agregarGrupo()">
+		<h2 class="form-title">Agregar grupo</h2>
+
+		<div class="form-body">
+			<div class="input-group">
+				<label for="nombre_grupo">Nombre del grupo</label>
+				<input type="text" id="nombre_grupo" name="nombre_grupo">
+			</div>
+		</div>
+		
+		<div class="form-footer">
+			<input id="close-group-form" class="footer-btn" type="button" value="Cancelar">
+			<input class="footer-btn" type="submit" value="Agregar">
+		</div>
+
+	</form>
+
+	<!-- Formulario crear tarea -->
+	<form id="form-tarea" class="hide-form" onsubmit="return agregarTarea()">
+		<h2 class="form-title">Agregar tarea</h2>
+
+		<div class="form-body">
+
+			<div class="input-group">
+				<label for="nombre_tarea">Nombre</label>
+				<input type="text" id="nombre_tarea" name="nombre_tarea">
+			</div>
+
+			<div class="input-group">
+				<label for="desc_tarea">Descripcion</label>
+				<input type="text" id="desc_tarea" name="desc_tarea">
+			</div>
+
+			<div class="join-inputs">
+				<div class="input-group">
+					<label for="prioridad_tarea">Prioridad</label>
+					<select name="prioridad_tarea" id="prioridad_tarea">
+						<option value="1" selected>Alta</option>
+						<option value="2">Media</option>
+						<option value="3">Baja</option>
+					</select>
+				</div>
+				<div class="input-group">
+					<label for="lista_tarea">Grupo</label>
+					<select name="lista_tarea" id="lista_tarea">
+						<option value="null" selected>Ninguna</option>
+
+						<% if (allListas.length > 0) { %>
+							<% for(lista of allListas) { %>
+								<option value="<%= lista.id %>"><%= lista.titulo %></option>
+							<% } %>
+						<% } %>
+
+					</select>
+				</div>
+			</div>
+
+			<% if (user) { %>
+				<div class="input-group">
+					<label for="usuario_tarea">Usuario</label>
+					<select name="usuario_tarea" id="usuario_tarea">
+						<option value="<%= user.id %>" selected><%= user.usuario %></option>
+
+						<% if (users.length > 0) { %>
+							<% for(u of users) { %>
+								<option value="<%= u.id %>"><%= u.usuario %></option>
+							<% } %>
+						<% } %>
+						
+					</select>
+				</div>
+			<% } %>
+
+			<div class="input-group">
+				<label for="limite_tarea">Fecha Limite</label>
+				<input type="date" id="limite_tarea" name="limite_tarea">
+			</div>
+			
+		</div>
+		
+		<div class="form-footer">
+			<input id="close-item-form" class="footer-btn" type="button" value="Cancelar">
+			<input class="footer-btn" type="submit" value="Agregar">
+		</div>
+
+	</form>
 
 	<script src="/javascripts/script.js"></script>
 	<script src="/javascripts/gradient.js"></script>

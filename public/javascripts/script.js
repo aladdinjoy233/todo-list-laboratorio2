@@ -134,43 +134,6 @@ function borrarLista(id) {
 		});
 }
 
-// function borrar(id) {
-// 	let list = document.querySelector('ul.task-list');
-
-// 	fetch(`todo/delete/${id}`, {
-// 		headers: {
-// 			'Content-Type': 'application/json'
-// 		},
-// 		method: 'POST',
-// 	})
-// 		.then(res => res.json())
-// 		.then(data => {
-
-// 			if (list.querySelectorAll('li').length === 1) {
-// 				let itemToRemove = document.querySelector(`[data-id="${data[0].id}"]`);
-// 				itemToRemove.classList.add('anim-out', 'just-slide');
-
-// 				let emptyListItem = document.createElement('li');
-// 				emptyListItem.innerHTML = 'No added tasks';
-// 				emptyListItem.classList.add('empty-list', 'anim-in', 'just-slide');
-
-// 				setTimeout(() => {
-// 					list.removeChild(itemToRemove);
-// 					list.appendChild(emptyListItem);
-// 				}, 500);
-
-// 			} else {
-// 				let itemToRemove = document.querySelector(`[data-id="${data[0].id}"]`);
-// 				itemToRemove.classList.add('anim-out');
-// 				setTimeout(() => {
-// 					list.removeChild(itemToRemove);
-// 				}, 1000);
-// 			}
-
-// 		});
-
-// }
-
 let creationMenu = document.querySelector('.creation-menu');
 let newBtn = document.querySelector('.new-btn');
 
@@ -194,22 +157,28 @@ let newGroupBtn = document.querySelector('.new-group');
 let cancelTaskBtn = document.querySelector('#close-item-form');
 let cencelGroupBtn = document.querySelector('#close-group-form');
 
+let darkOverlay = document.querySelector('.dark-overlay');
+
 newGroupBtn.addEventListener('click', () => {
 	document.querySelector('#form-grupo').classList.remove('hide-form');
+	darkOverlay.classList.add('show');
 	creationMenu.classList.remove('open');
 })
 
 cencelGroupBtn.addEventListener('click', () => {
 	document.querySelector('#form-grupo').classList.add('hide-form');
+	darkOverlay.classList.remove('show');
 })
 
 newTaskBtn.addEventListener('click', () => {
 	document.querySelector('#form-tarea').classList.remove('hide-form');
+	darkOverlay.classList.add('show');
 	creationMenu.classList.remove('open');
 })
 
 cancelTaskBtn.addEventListener('click', () => {
 	document.querySelector('#form-tarea').classList.add('hide-form');
+	darkOverlay.classList.remove('show');
 })
 
 const cambiarEstado = tareaId => {
