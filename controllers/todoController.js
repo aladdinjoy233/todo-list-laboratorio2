@@ -5,9 +5,6 @@ var { Op } = require('sequelize');
 
 // Vistas
 exports.index = async (req, res, next) => {
-	if (!req.user) return res.redirect('/')
-
-
 	await actualizarTareas();
 
 	const tareas = await obtenerTareas(req.user);

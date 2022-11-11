@@ -62,7 +62,7 @@ passport.use('auth-google',
 		// Si no existe el usuario, crealo!
 		if (user == null) {
 			const inventedPass = await bcryptjs.hash(profile.id, 8)
-			const userNuevo = User.create({ nombre: profile.displayName, usuario: profile.emails[0].value, password: inventedPass })
+			const userNuevo = await User.create({ nombre: profile.displayName, usuario: profile.emails[0].value, password: inventedPass })
 
 			done(null, userNuevo);
 		} else { // Si existe, logeate entoncess

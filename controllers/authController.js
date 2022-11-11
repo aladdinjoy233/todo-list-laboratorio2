@@ -82,7 +82,7 @@ exports.googleLogin = (req, res, next) => {
 			'https://www.googleapis.com/auth/userinfo.email',
 			'https://www.googleapis.com/auth/userinfo.profile'
 		]		
-	}, (err, user, info) => {
+	}, async (err, user, info) => {
 
 		// Si hay error, dar error
 		if (err) return next(err);
